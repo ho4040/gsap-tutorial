@@ -35,12 +35,15 @@ target 에는 css selector 가 문자열로 오거나, document.getElementById �
 초단위로 애니메이션이 진행될 시간
 
 
-### vars
+# vars
 
 크롬 관리자 페이지를 보면, style 이 계속 업데이트 되는 것을 볼 수 있음.
 
 style 에 들어가는 css style 을 __camelCase__ 로 표현해주면 됨.
 
+
+
+### transform matrix
 
 `rotation`, `scale` 같은 값도 있는데, 에건 transform matrix 를 자동으로 만들어서 적용해줌. (vendor prefix등을 고민 할 필요 없이 알아서 해줌.)
 
@@ -65,7 +68,7 @@ TweenMax.to("#logo", 3, {ease:Back.easeOut})
 사용 가능한 항목은 홈페이지의 ease visualizer 를 확인.(https://greensock.com/docs/Easing)
 
 
-### from, to
+# from, to
 
 TweenMax.to 의 경우에는 var 가 목표가 되지만, TweenMax.from 의 경우에는 현재 상태로 오기 전 시작 상태를 의미함.
 
@@ -74,7 +77,7 @@ TweenMax.to 의 경우에는 var 가 목표가 되지만, TweenMax.from 의 경�
 TweenMax.from("#logo", 3, {left:"300px"})
 ```
 
-# 멀티플타겟
+# 여러타겟에 적용
 
 box class 를 가진 모든 항목에 적용하려면  다음과 같은 방식으로 css selector 를 사용하면 모두 동시에 적용됨.
 
