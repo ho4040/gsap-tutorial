@@ -23,13 +23,17 @@
         }
 
         .box {
-
-            width: 100px;
-            height: 120px;
-            position: absolute;
+            position: fixed;
             display:inline-block;
             border:1px solid black;
             background-color:#ff0000;
+        }
+
+        .top-img {
+            position: fixed;
+            display:inline-block;
+            width:300px;
+            height:350px;
         }
     </style>
 
@@ -38,49 +42,137 @@
 <body>
     <div>
         
-        <div id="box0" class="box" style="left:50%;top:50%;"></div>
-        <div id="box1" class="box" style="left:50%;top:50%;"></div>
-        <div id="box2" class="box" style="left:50%;top:50%;"></div>
-        <div id="box3" class="box" style="left:50%;top:50%;"></div>
+        <div id="logo" class="box" style="left:50%;top:50%;"></div>
+        <div id="content" class="box" style="left:50%;top:50%;"></div>        
 
         <script>
+            // let imgs = [
+            //     {
+            //         "src":"a.jpg", 
+            //         "tags":["패딩", "padding", "black"],
+            //         "children":[
+            //             {"src":"a0.jpg", "link":"http://sixshop.com", "price":23000 },
+            //             {"src":"a1.jpg", "link":"http://sixshop.com", "price":24000 },
+            //             {"src":"a2.jpg", "link":"http://google.com", "price":21000 }
+            //         ]
+                    
+            //     },
+            //     {
+            //         "src":"b.jpg", 
+            //         "tags":["tag1", "tag2", "tag333"],
+            //         "children":[
+            //             {"src":"b0.jpg", "link":"http://sixshop.com", "price":23000, "brand":"짱짱브랜드", "name":"상품명" },
+            //             {"src":"b1.jpg", "link":"http://sixshop.com", "price":24000, "btn":"buy" },
+            //             {"src":"b2.jpg", "link":"http://google.com", "price":21000, "btn":"location" }
+            //         ]
+            //     },
+            //     {
+            //         "src":"b.jpg", 
+            //         "tags":["tag1", "tag2", "tag333"],
+            //         "children":[
+            //             {"src":"b0.jpg", "link":"http://sixshop.com", "price":23000, "brand":"짱짱브랜드", "name":"상품명" },
+            //             {"src":"b1.jpg", "link":"http://sixshop.com", "price":24000, "btn":"buy" },
+            //             {"src":"b2.jpg", "link":"http://google.com", "price":21000, "btn":"location" }
+            //         ]
+            //     },
+            //     {
+            //         "src":"b.jpg", 
+            //         "tags":["tag1", "tag2", "tag333"],
+            //         "children":[
+            //             {"src":"b0.jpg", "link":"http://sixshop.com", "price":23000, "brand":"짱짱브랜드", "name":"상품명" },
+            //             {"src":"b1.jpg", "link":"http://sixshop.com", "price":24000, "btn":"buy" },
+            //             {"src":"b2.jpg", "link":"http://google.com", "price":21000, "btn":"location" }
+            //         ]
+            //     },
+            //     {
+            //         "src":"b.jpg", 
+            //         "tags":["tag1", "tag2", "tag333"],
+            //         "children":[
+            //             {"src":"b0.jpg", "link":"http://sixshop.com", "price":23000, "brand":"짱짱브랜드", "name":"상품명" },
+            //             {"src":"b1.jpg", "link":"http://sixshop.com", "price":24000, "btn":"buy" },
+            //             {"src":"b2.jpg", "link":"http://google.com", "price":21000, "btn":"location" }
+            //         ]
+            //     }
+            // ]
+
+
             let sw = window.innerWidth;
             let sh = window.innerHeight;
 
-            let tl0 = new TimelineMax();
-            tl0 .to("#box0",0.5, {marginLeft:`-200px`, scale:1})
-                .to("#box1",0.5, {marginLeft:`-100px`, scale:1}, 0)
-                .to("#box2",0.5, {marginLeft:`0px`, scale:1}, 0)
-                .to("#box3",0.5, {marginLeft:`100px`, scale:1}, 0)
-            //tl0.pause()
+            let state1 = {
+                logo : { left:"10px", top:"10px", width:"100px", height:"100px"},
+                content : { left:"110px", top:"10px", width:`${sw-100}px`, height:"500px"},
+            }
 
-            let tl1 = new TimelineMax();
-            tl1 .to("#box0",0.5, {marginLeft:`${0}px`, scale:5})
-                .to("#box1",0.5, {marginLeft:`${-100 + 500}px`}, 0)
-                .to("#box2",0.5, {marginLeft:`${0+ 500}px`}, 0)
-                .to("#box3",0.5, {marginLeft:`${100+ 500}px`}, 0)
-            tl1.pause()
+            let state2 = {
+                logo : { left:"200px", top:"20px", width:"300px", height:"300px"},
+                content : { left:"10px", top:"310px", width:`${sw}px`, height:"500px"},
+            }
 
-            let tl2 = new TimelineMax();
-            tl2 .to("#box0",0.5, {marginLeft:`${-200 - 500}px`})
-                .to("#box1",0.5, {marginLeft:`${0}px`, scale:5}, 0)
-                .to("#box2",0.5, {marginLeft:`${0+ 500}px`}, 0)
-                .to("#box3",0.5, {marginLeft:`${100+ 500}px`}, 0)
-            tl2.pause()
+            let state3 = {
+                logo : { left:"200px", top:"50px", width:"100px", height:"100px" },
+                content : { left:"10px", top:"10px", width:`${sw}px`, height:"500px"},
+            }
 
-            $("#box0").on("click", function(){ 
-                if(tl1.time() == 0)
-                    tl1.play();
-                else if(tl1.time() == tl1.totalTime())                 
-                    tl1.reverse();
+            let currentState = null;
+
+            function addImageInfo(state, imgs){
+                for(let i=0;i<imgs.length;i++){
+                    state["img-"+i] = {left:i*300+"px", top:"200px"}
+                }
+                return state
+            }
+
+            
+            function makeTransitionAnimation(goalState){
+                let tl = new TimelineMax();
+                for(let k in goalState){
+                    let selector = "#"+k;
+                    tl.to(selector, 1, goalState[k], 0)
+                }
+                tl.pause()
+                currentState = goalState;
+                console.log(goalState)
+                return tl;
+            }
+
+            
+            
+            $().ready(function(){
+
+                // console.log(imgs)
+                // for(let i=0;i<imgs.length;i++){
+                //     let img = imgs[i];
+                //     let id = "img-"+i
+                //     $('body').append("<img class='top-img' id='img-"+i+"' src='"+img['src']+"'>")
+                // }
+                // state1 = addImageInfo(state1, imgs)
+                // console.log(state1)
+                let tl = makeTransitionAnimation(state1)
+                tl.resume();
             })
 
-            $("#box1").on("click", function(){
-                if(tl2.time() == 0)
-                    tl2.play();
-                else if(tl2.time() == tl2.totalTime())                 
-                    tl2.reverse();
+            $("#logo").on("click", function(){
+                let tl = null
+                
+                if(currentState == state1)
+                    tl = makeTransitionAnimation(state2)
+                else
+                    tl = makeTransitionAnimation(state1)
+
+                tl.resume();
             })
+
+            $("#content").on("click", function(){
+                let tl = null
+                if(currentState == state3)
+                    tl = makeTransitionAnimation(state1)
+                else
+                    tl = makeTransitionAnimation(state3)
+                tl.resume();
+            })
+
+            
             
         </script>
 
