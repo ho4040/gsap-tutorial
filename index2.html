@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.0.2/TweenMax.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.0.2/TimelineMax.min.js"></script>
+
+    <style>
+        body {
+            background-color: #1d1d1d;
+            font-family: "Asap", sans-serif;
+            color: #989898;
+            margin: 10px;
+            font-size: 16px;
+            height:2000px;
+            overflow-x: hidden;
+        }
+
+        .box {
+
+            width: 100px;
+            height: 120px;
+            position: absolute;
+            display:inline-block;
+            border:1px solid black;
+            background-color:#ff0000;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div>
+        
+        <div id="box0" class="box" style="left:50%;top:50%;"></div>
+        <div id="box1" class="box" style="left:50%;top:50%;"></div>
+        <div id="box2" class="box" style="left:50%;top:50%;"></div>
+        <div id="box3" class="box" style="left:50%;top:50%;"></div>
+
+        <script>
+            let sw = window.innerWidth;
+            let sh = window.innerHeight;
+
+            let tl0 = new TimelineMax();
+            tl0 .to("#box0",0.5, {marginLeft:`-200px`, scale:1})
+                .to("#box1",0.5, {marginLeft:`-100px`, scale:1}, 0)
+                .to("#box2",0.5, {marginLeft:`0px`, scale:1}, 0)
+                .to("#box3",0.5, {marginLeft:`100px`, scale:1}, 0)
+            //tl0.pause()
+
+            let tl1 = new TimelineMax();
+            tl1 .to("#box0",0.5, {marginLeft:`${0}px`, scale:5})
+                .to("#box1",0.5, {marginLeft:`${-100 + 500}px`}, 0)
+                .to("#box2",0.5, {marginLeft:`${0+ 500}px`}, 0)
+                .to("#box3",0.5, {marginLeft:`${100+ 500}px`}, 0)
+            tl1.pause()
+
+            let tl2 = new TimelineMax();
+            tl2 .to("#box0",0.5, {marginLeft:`${-200 - 500}px`})
+                .to("#box1",0.5, {marginLeft:`${0}px`, scale:5}, 0)
+                .to("#box2",0.5, {marginLeft:`${0+ 500}px`}, 0)
+                .to("#box3",0.5, {marginLeft:`${100+ 500}px`}, 0)
+            tl2.pause()
+
+            $("#box0").on("click", function(){ 
+                if(tl1.time() == 0)
+                    tl1.play();
+                else if(tl1.time() == tl1.totalTime())                 
+                    tl1.reverse();
+            })
+
+            $("#box1").on("click", function(){
+                if(tl2.time() == 0)
+                    tl2.play();
+                else if(tl2.time() == tl2.totalTime())                 
+                    tl2.reverse();
+            })
+            
+        </script>
+
+</body>
+
+</html>
