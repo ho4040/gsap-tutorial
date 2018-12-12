@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        /* desktop */
+        body {
+            background-color: #f6c001;
+            overflow-x: hidden;
+            /* overflow-x: hidden; */
+            padding: 0;
+            margin: 0;
+        }
+
+        img {
+            position: absolute;
+            z-index: 1;
+        }
+
+        #img-nikita {
+            left: 0px;
+            height: 80vh;
+            top: 50vh;
+            margin-top: -40vh;
+        }
+
+        #coming-soon {
+            width: 50%;
+        }
+
+        #cover {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #nav-left {
+            left: 2em;
+            top: 1em;
+        }
+
+        #nav-right {
+            right: 2em;
+            top: 1em;
+        }
+
+        #desktop {
+            display: block;
+            position: relative;
+        }
+
+        #mobile {
+            display: none;
+        }
+
+        #m-coming-soon {
+            display: none;
+        }
+
+        /* mobile */
+        @media only screen and (max-device-width: 768px) {
+            #desktop {
+                display: none;
+            }
+
+            #coming-soon {
+                display: none;
+            }
+
+            #m-coming-soon {
+                width: 50%;
+                display: inline-block;
+            }
+
+
+            #mobile {
+                display: block;
+                position: relative;
+            }
+
+            #m-img-nikita {
+                width: 100vw;
+                margin-top: 5em;
+            }
+
+            #m-filter {
+                top: 3.5em;
+                left: 1em;
+                width:90vw;
+            }
+
+            #m-nav-right {
+                right: 1em;
+                top: 1em;
+                width:40%;
+            }
+
+            #m-logo {
+                left: 1em;
+                top: 1em;
+                width:20%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <div id="desktop">
+        <img id="img-nikita" src="static/img-nikita.png">
+        <img id="nav-left" src="static/nav-left.png">
+        <img id="nav-right" src="static/nav-right.png">
+    </div>
+
+    <div id="mobile">
+
+        <img id="m-filter" src="static/m-filter.png">
+        <img id="m-nav-right" src="static/m-nav-right.png">
+        <img id="m-img-nikita" src="static/m-img-nikita.png">
+        <img id="m-logo" src="static/m-nav-left(logo).png">
+    </div>
+
+    <div id="cover">
+        <img id="coming-soon" src="static/coming-soon.png">
+        <img id="m-coming-soon" src="static/m-coming-soon.png">
+    </div>
+
+
+
+</body>
+
+</html>
