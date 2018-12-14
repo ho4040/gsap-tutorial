@@ -4,19 +4,25 @@ let sh = window.innerHeight;
 let stateStack = []
 
 function parentSelector(parentIdx) {
-    return `#top-img-layer > img[data-idx='${parentIdx}']`
+    return `#top-img-layer > div[data-idx='${parentIdx}']`
 }
 
 function childSelector(parentIdx, childIdx) {
-    return `#sub-img-layer > img[data-parent='${parentIdx}'][data-idx='${childIdx}']`
+    return `#sub-img-layer > div[data-parent='${parentIdx}'][data-idx='${childIdx}']`
 }
 
 function nextBtnSelector(parentIdx) {
-    return `#sub-img-layer > img.next-btn[data-parent='${parentIdx}']`
+    return `#sub-img-layer > div.next-btn[data-parent='${parentIdx}']`
+}
+
+function getAspectRatio(selector){
+    return Number($(selector + " > img").attr('ratio'))
+    //return 1;
 }
 
 // 최초상태
 let state_initial = function (idx) {
+    idx = Math.floor(idx)
     let state = {
         name: "init"
     }
@@ -25,14 +31,13 @@ let state_initial = function (idx) {
     for (let i = 0; i < data.length; i++) {
         // 메인 이미지 위치
         let selector = parentSelector(i)
-        let element = $(selector);
-        let ratio = element.get(0).naturalWidth / element.get(0).naturalHeight
-        var rt = {
+        let ratio = getAspectRatio(selector)
+        let rt = {
             w: sh * 0.7 * ratio,
             h: sh * 0.7
         }
         state[selector] = {
-            left: sw / 2 + end,
+            left: rt.w *0.5 + end,
             top: sh / 2 + Math.random() * 50,
             marginLeft: -rt.w / 2,
             marginTop: -rt.h / 2,
@@ -46,9 +51,8 @@ let state_initial = function (idx) {
         // 서브 이미지 위치
         for (let j = 0; j < data[i].children.length; j++) {
             let selector = childSelector(i, j)
-            let element = $(selector);
-            let ratio = element.get(0).naturalWidth / element.get(0).naturalHeight
-            var rt = {
+            let ratio = getAspectRatio(selector)
+            let rt = {
                 w: sh * 0.9 * ratio,
                 h: sh * 0.9
             }
@@ -61,11 +65,10 @@ let state_initial = function (idx) {
 
         //NEXT 버튼
         selector = nextBtnSelector(i);
-        element = $(selector);
-        ratio = element.get(0).naturalHeight / element.get(0).naturalWidth
+        ratio = getAspectRatio(selector)
         state[selector] = {
             width: sw * 0.2,
-            height: sw * 0.2 * ratio,
+            height: sw * 0.2 / ratio,
             opacity: 0
         }
     }
@@ -76,9 +79,12 @@ let state_initial = function (idx) {
         let selector = parentSelector(i);
         state[selector].left += v;
     }
+    
+    state["#bg"] = {'top':0, 'backgroundColor':"#555555"};
+    state["#about-layer"] = {'left':"100vw"};
 
     return state;
-}
+}// end of state initial
 
 
 
@@ -101,7 +107,7 @@ let state_scroll = function (idx, scrollRatio) {
             state[selector] = {
                 left: sw / 2,
                 top: sh / 2,
-                scale: 1.5
+                scale: 1.5,
             }
             selctors.push(selector)
             //서브 이미지들 위치
@@ -112,7 +118,6 @@ let state_scroll = function (idx, scrollRatio) {
                 selctors.push(selector)
                 let height = $(selector).height()
                 let width = $(selector).width()
-                let subImg = data[i].children[j];
                 let left = (sw / 2) + ((j % 2) * -width);
                 let top = scrollHeight;
                 state[selector] = {
@@ -145,19 +150,16 @@ let state_scroll = function (idx, scrollRatio) {
             }
         } else {
             // 메인 이미지
-            let targeMainPos = $(parentSelector(idx)).position();
-            let otherMainPos = $(selector).position()
             let dir = i - idx
             let newLeft = sw * 0.5 + dir * sw
-            console.log(i, otherMainPos.left - targeMainPos.left)
             state[selector] = {
                 left: newLeft,
-                scale: 1
+                scale: 1,
+                ease:Power2.easeOut,
             }
             //서브 이미지들 위치
             for (let j = 0; j < data[i].children.length; j++) {
                 let selector = childSelector(i, j)
-                let subImg = data[i].children[j];
                 state[selector] = {
                     top: '100vh',
                     opacity: 0
@@ -166,7 +168,17 @@ let state_scroll = function (idx, scrollRatio) {
         }
     }
 
+    //console.log(data['color'])
+    state["#bg"] = {'top':(-100 - sh*scrollRatio), 'backgroundColor':data[idx]['color']};
+    state["#about-layer"] = {'left':"100vw"};
 
+
+    return state;
+} // end of state scroll
+
+let state_about = function(){
+    let state= {name:'about'}
+    state["#about-layer"] = {'left':0, 'ease':Power4.easeOut};
     return state;
 }
 
@@ -174,19 +186,21 @@ function buildScene() {
     for (let i = 0; i < data.length; i++) {
         let item = data[i];
 
-        let tag = `<img src='${item.src}' class='top-img' data-idx='${i}'>`;
+        let tag = `<div data class='top-img' data-idx='${i}'><img src='${item.src}'></div>`;
         $('#top-img-layer').append(tag);
 
         for (let j in item.children) {
             let subItem = item.children[j];
-            let tag = `<img src='${subItem.src}' class='sub-img' data-parent='${i}' data-idx='${j}'>`;
+            let tag = `<div class='sub-img' data-parent='${i}' data-idx='${j}'>
+                <img src='${subItem.src}'>
+                <span class='label'>TEST TEXT!!</span>
+            </div>`;
             $('#sub-img-layer').append(tag);
         }
 
         let nextIdx = (i + 1) % data.length;
         let itemNext = data[nextIdx];
-        let nextBtnTag =
-            `<img src='${itemNext.src}' class='next-btn' data-parent='${i}' data-next-idx='${nextIdx}'>`;
+        let nextBtnTag =`<div class='next-btn' data-parent='${i}' data-next-idx='${nextIdx}'><img src='${itemNext.src}'></div>`;
         $('#sub-img-layer').append(nextBtnTag);
     }
 
@@ -222,13 +236,15 @@ function transition(seq) {
             state,
             tl
         })
+        console.log(stateStack)
     }
     return tlSeq;
 }
 
 function popState() {
     let last = stateStack.pop()
-    last.tl.reverse()
+    last.tl.startTime(last.tl.totalTime());
+    last.tl.reverse();
 }
 
 function currentStateName() {
@@ -256,9 +272,16 @@ function unlock() {
     locked = false;
 }
 
-buildScene().on('load', function () {
+buildScene().on('load', function (evt) {
 
     imgLoaded++
+    console.log("size")
+
+    //$(evt.currentTarget).data('ratio', evt.currentTarget.naturalWidth/evt.currentTarget.naturalHeight)
+    //console.log($(evt.currentTarget))
+    $(evt.currentTarget).attr('ratio', evt.currentTarget.naturalWidth/evt.currentTarget.naturalHeight)
+    //$(evt.currentTarget).data('foo', "50")
+
     if ($('img').length > imgLoaded)
         return;
 
@@ -277,9 +300,9 @@ buildScene().on('load', function () {
         let dir = evt.originalEvent.deltaY / Math.abs(evt.originalEvent.deltaY) //휠 방향
 
         if (currentStateName() == 'init') {
-            if (playing())
-                return;
-            selectedIdx += dir
+            // if (playing())
+            //     return;
+            selectedIdx += dir*0.5
             selectedIdx = Math.max(Math.min(data.length - 1, selectedIdx), 0)
             transition([{
                 state: state_initial(selectedIdx)
@@ -344,6 +367,34 @@ buildScene().on('load', function () {
             }])
         }
 
+    })
+
+    $('#about-open-btn').on("click", function(){
+        TweenMax.to('#about-layer', 1, {left:0, ease:Power4.easeOut})
+    })
+
+    $('#about-close-btn').on("click", function(){     
+        TweenMax.to('#about-layer', 1, {left:"100vw", ease:Power4.easeOut})   
+    })
+
+    $('#main-btn').on("click", function(){
+        if (currentStateName() != 'initial') {
+            if (scrolldown < 0.1)
+            transition([{
+                state: state_initial(selectedIdx)
+            }]);
+            else
+                transition([{
+                    state: state_scroll(selectedIdx)
+                }, {
+                    state: state_initial(selectedIdx)
+                }]);
+        }else{
+            transition([{
+                state: state_initial(0)
+            }]);
+        }
+        
     })
 
     listenResizeEnd(function () {

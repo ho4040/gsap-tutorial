@@ -1,5 +1,6 @@
 window.data = [{
-        "src": "static/img.png",
+        "src": "static/sub1.png",
+        "color":"#0099ff",
         "tags": ["패딩", "padding", "black"],
         "children": [{
                 "src": "static/sub1.png",
@@ -20,7 +21,8 @@ window.data = [{
 
     },
     {
-        "src": "static/img.png",
+        "src": "static/sub2.jpg",
+        "color":"#ff99ff",
         "tags": ["tag1", "tag2", "tag333"],
         "children": [{
                 "src": "static/sub2.jpg",
@@ -44,7 +46,8 @@ window.data = [{
         ]
     },
     {
-        "src": "static/img.png",
+        "src": "static/sub3.jpg",
+        "color":"#998855",
         "tags": ["tag1", "tag2", "tag333"],
         "children": [{
                 "src": "static/sub3.jpg",
@@ -68,7 +71,8 @@ window.data = [{
         ]
     },
     {
-        "src": "static/img.png",
+        "src": "static/sub3.jpg",
+        "color":"#998855",
         "tags": ["tag1", "tag2", "tag333"],
         "children": [{
                 "src": "static/sub3.jpg",
@@ -92,7 +96,8 @@ window.data = [{
         ]
     },
     {
-        "src": "static/img.png",
+        "src": "static/sub3.jpg",
+        "color":"#998855",
         "tags": ["tag1", "tag2", "tag333"],
         "children": [{
                 "src": "static/sub3.jpg",

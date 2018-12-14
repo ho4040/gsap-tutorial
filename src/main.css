@@ -2,9 +2,10 @@ body {
     background-color: #1d1d1d;
     font-family: "Asap", sans-serif;
     color: #989898;
-    margin: 10px;
+    margin: 0px;
     font-size: 16px;
     height:100vh;
+    padding:0;    
     overflow-x: hidden;
     overflow-y: hidden;
 }
@@ -16,13 +17,18 @@ body {
     background-color:#ff0000;
 }
 
-.top-img {
+div.top-img {
     position: absolute;
     display:inline-block;
-    background-color:white;
     margin-left:-50%;
     margin-top:-50%;
     top:200vh;
+}
+
+div.top-img > img {
+    width:100%;
+    height:100%;
+    cursor: pointer;
 }
 
 #top-img-layer {
@@ -33,14 +39,76 @@ body {
     position: relative;
 }
 
-.sub-img {
+div.sub-img {
     position: absolute;
-    background-color:white;
+    top:100vh;
+    text-align: center;
+}
+
+div.sub-img > img {
+    width:100%;
+    height:100%;
+}
+
+div.next-btn {
+    position: absolute;
     top:100vh;
 }
 
-.next-btn {
+div.next-btn > img {
+    width:100%;
+    height:100%;
+}
+
+span.sub-img-label {
+    font-size: 3em;
+
+}
+
+#top-menu {
+    left:0;
+    top:0;
     position: absolute;
-    background-color:white;
-    top:100vh;
+    width:100vw;
+    height:100vh;
+}
+
+#top-menu > span:nth-child(1){
+    position: absolute;
+    left:2em;
+    top:3em;   
+    cursor: pointer;
+}
+
+#top-menu > span:nth-child(2){
+    position: absolute;
+    right:2em;
+    top:3em;  
+    cursor: pointer;
+}
+
+#bg {
+    position: fixed;
+    width:100vw;
+    height:100vh;
+    background-color:#989898;
+    z-index: 0;
+}
+
+#about-open-btn {
+    cursor: pointer;
+}
+
+#about-close-btn {
+    cursor: pointer;
+}
+
+#about-layer {
+    position: fixed;
+    width:100vw;
+    height:100vh;
+    left:100vw;
+    top:0;
+    background-color: black;
+    color:white;   
 }
