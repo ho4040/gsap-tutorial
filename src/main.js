@@ -80,7 +80,7 @@ let state_initial = function (idx) {
         state[selector].left += v;
     }
     
-    state["#bg"] = {'top':0, 'backgroundColor':"#555555"};
+    state["#bg"] = {'top':0, 'backgroundColor':"#333344"};
     state["#about-layer"] = {'left':"100vw"};
 
     return state;
